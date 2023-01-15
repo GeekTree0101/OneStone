@@ -8,6 +8,7 @@
 import SwiftUI
 import LiveViewNativeCore
 
+
 struct NavStackEntryView<R: CustomRegistry>: View {
     // this is a @StateObject instead of @ObservedObject because changing which DOMWindows for a LiveView is not allowed
     @StateObject private var coordinator: LiveViewCoordinator<R>
@@ -23,7 +24,6 @@ struct NavStackEntryView<R: CustomRegistry>: View {
     
     var body: some View {
         // TODO: the ZStack is a workaround for an iOS 16 beta bug, check back before release to see if it's still needed
-        let _ = Self._printChanges()
         SwiftUI.ZStack {
             elementTree
                 .environmentObject(liveViewModel)
