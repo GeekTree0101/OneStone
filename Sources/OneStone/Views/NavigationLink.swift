@@ -23,9 +23,6 @@ struct NavigationLink<R: CustomRegistry>: View {
         if let linkOpts = LinkOptions(element: element),
            context.coordinator.config.navigationMode.supportsLinkState(linkOpts.state) {
             SwiftUI.ZStack {
-                // need a NavigationLink present to display the disclosure indicator
-                SwiftUI.NavigationLink(value: "") { EmptyView() }
-                
                 SwiftUI.Button {
                     activateNavigationLink()
                 } label: {
@@ -54,40 +51,16 @@ struct NavigationLink<R: CustomRegistry>: View {
             
         case .push:
             func doPushNavigation() {
-                navCoordinator.sourceRect = source?.frameProvider() ?? .zero
-                navCoordinator.sourceElement = source?.element
-                navCoordinator.overrideOverlayView = overrideView?.view
                 navCoordinator.navigationPath.append(dest)
             }
             
-            // if there's no animation source, we trigger the navigation immediately so that it feels more responsive
-            guard source != nil else {
-                Task {
-                    await context.coordinator.navigateTo(url: dest, replace: false)
-                }
-                // TODO: when this happens, swiftui warns that publishing changes from within a view update is not allowed
-                // even though this is happening in a button action, not sure why
-                doPushNavigation()
-                return
-            }
-            
-            let subject = PassthroughSubject<Void, Never>()
-            doNavigationCancellable = subject
-                // whichever happens first, connection or timeout, do the navigation
-                .first()
-                .sink { _ in
-                    doPushNavigation()
-                }
-            
             Task {
                 await context.coordinator.navigateTo(url: dest, replace: false)
-                subject.send()
             }
-            
-            // if connecting is too slow, navigate immediately without the custom animation
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(150)) {
-                subject.send()
-            }
+            // TODO: when this happens, swiftui warns that publishing changes from within a view update is not allowed
+            // even though this is happening in a button action, not sure why
+            doPushNavigation()
+            return
         }
     }
     
