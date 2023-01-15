@@ -82,13 +82,7 @@ public struct LiveView<R: CustomRegistry>: View {
     
     @ViewBuilder
     private var navHeroOverlayView: some View {
-        // some views (AsyncImage) don't work properly when used in the animation
-        // so they can be overriden with a preference
-        if let overrideView = navigationCoordinator.overrideOverlayView {
-            overrideView
-        } else {
-            coordinator.builder.fromNodes(navigationCoordinator.sourceElement!.children(), coordinator: coordinator, url: coordinator.currentURL)
-        }
+        coordinator.builder.fromNodes(navigationCoordinator.sourceElement!.children(), coordinator: coordinator, url: coordinator.currentURL)
     }
     
     @ViewBuilder

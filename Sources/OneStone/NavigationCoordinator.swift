@@ -30,8 +30,6 @@ class NavigationCoordinator: NSObject, UINavigationControllerDelegate, Observabl
             }
         }
     }
-    // if set, this image will be used as the overlay view instead of building one from the source element
-    @Published var overrideOverlayView: AnyView?
     @Published var sourceElement: ElementNode?
     @Published var destElement: ElementNode?
     @Published var state: State = .idle
