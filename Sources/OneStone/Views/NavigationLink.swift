@@ -8,7 +8,6 @@
 import SwiftUI
 import Combine
 
-@available(iOS 16.0, *)
 struct NavigationLink<R: CustomRegistry>: View {
     @ObservedElement private var element: ElementNode
     private let context: LiveContext<R>

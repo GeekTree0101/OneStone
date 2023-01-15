@@ -65,9 +65,13 @@ fileprivate extension View {
         case .automatic:
             self.buttonStyle(.automatic)
         case .bordered:
-            self.buttonStyle(.bordered)
+            if #available(iOS 15, *) {
+                self.buttonStyle(.bordered)
+            }
         case .borderedProminent:
-            self.buttonStyle(.borderedProminent)
+            if #available(iOS 15, *) {
+                self.buttonStyle(.borderedProminent)
+            }
         case .borderless:
             self.buttonStyle(.borderless)
         case .plain:

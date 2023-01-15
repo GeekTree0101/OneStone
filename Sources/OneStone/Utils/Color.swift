@@ -33,20 +33,12 @@ extension Color {
             self = .black
         case "system-blue":
             self = .blue
-        case "system-brown":
-            self = .brown
         case "system-clear":
             self = .clear
-        case "system-cyan":
-            self = .cyan
         case "system-gray":
             self = .gray
         case "system-green":
             self = .green
-        case "system-indigo":
-            self = .indigo
-        case "system-mint":
-            self = .mint
         case "system-orange":
             self = .orange
         case "system-pink":
@@ -55,8 +47,6 @@ extension Color {
             self = .purple
         case "system-red":
             self = .red
-        case "system-teal":
-            self = .teal
         case "system-white":
             self = .white
         case "system-yellow":

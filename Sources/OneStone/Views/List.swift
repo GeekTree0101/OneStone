@@ -48,7 +48,11 @@ private extension SwiftUI.List {
         case "grouped":
             self.listStyle(.grouped)
         case "inset-grouped":
-            self.listStyle(.insetGrouped)
+            if #available(iOS 14, *) {
+                self.listStyle(.insetGrouped)
+            } else {
+                self.listStyle(.grouped)
+            }
         default:
             fatalError("Invalid list style '\(element.attributeValue(for: "name")!)'")
         }
