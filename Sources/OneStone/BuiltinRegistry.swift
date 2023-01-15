@@ -51,7 +51,6 @@ struct BuiltinRegistry {
     enum ModifierType: String {
         case frame
         case listRowInsets = "list_row_insets"
-        case listRowSeparator = "list_row_separator"
         case navigationTitle = "navigation_title"
         case padding
         case tint
@@ -63,8 +62,6 @@ struct BuiltinRegistry {
             return try FrameModifier(from: decoder)
         case .listRowInsets:
             return try ListRowInsetsModifier(from: decoder)
-        case .listRowSeparator:
-            return try ListRowSeparatorModifier(from: decoder)
         case .navigationTitle:
             return try NavigationTitleModifier(from: decoder)
         case .padding:
