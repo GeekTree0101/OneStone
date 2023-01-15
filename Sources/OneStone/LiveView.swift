@@ -98,12 +98,6 @@ public struct LiveView<R: CustomRegistry>: View {
                 .navigationDestination(for: URL.self) { url in
                     NavStackEntryView(coordinator: coordinator, url: url)
                         .environmentObject(navigationCoordinator)
-                        .onPreferenceChange(HeroViewDestKey.self) { newDest in
-                            if let newDest {
-                                navigationCoordinator.destRect = newDest.frameProvider()
-                                navigationCoordinator.destElement = newDest.element
-                            }
-                        }
                 }
         }
         .onReceive(navigationCoordinator.$navigationPath.zip(navigationCoordinator.$navigationPath.dropFirst())) { (oldValue, newValue) in
