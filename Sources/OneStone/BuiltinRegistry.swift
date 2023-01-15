@@ -28,8 +28,6 @@ struct BuiltinRegistry {
             Button<R>(element: element, context: context, action: nil)
         case "image":
             Image(element: element, context: context)
-        case "asyncimage":
-            AsyncImage(element: element, context: context)
         case "scrollview":
             ScrollView<R>(element: element, context: context)
         case "spacer":
