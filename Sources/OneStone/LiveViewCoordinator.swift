@@ -15,12 +15,12 @@ import LiveViewNativeCore
 
 private var PUSH_TIMEOUT: Double = 30000
 
-struct OneStonLogger {
+struct OneStoneLogger {
     private let subsystem: String
     private let category: String
     
     init(subsystem: String, category: String) {
-       self.subsytem = subsystem
+       self.subsystem = subsystem
        self.category = category
     }
 
@@ -37,7 +37,7 @@ struct OneStonLogger {
     }
 }
 
-private let logger = OneStonLogger(subsystem: "LiveViewNative", category: "LiveViewCoordinator")
+private let logger = OneStoneLogger(subsystem: "LiveViewNative", category: "LiveViewCoordinator")
 
 /// The live view coordinator object handles connecting to Phoenix LiveView on the backend, managing the websocket connection, and transmitting/handling events.
 @MainActor

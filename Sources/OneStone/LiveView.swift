@@ -36,80 +36,14 @@ public struct LiveView<R: CustomRegistry>: View {
     }
 
     public var body: some View {
-        rootNavEntry
-            .task {
-                // TODO: the hasAppeared check may not be necessary with .task
-                if !hasAppeared {
-                    hasAppeared = true
-                    await coordinator.connect()
-                }
-            }
-    }
-        
-    @ViewBuilder
-    private var rootNavEntry: some View {
-        if case .enabled = coordinator.config.navigationMode {
-            navigationViewOrStack
-            .introspectNavigationController { navigationController in
-                guard !hasSetupNavigationControllerDelegate else {
-                    return
-                }
-                hasSetupNavigationControllerDelegate = true
-                navigationController.delegate = navigationCoordinator
-                navigationController.interactivePopGestureRecognizer?.addTarget(navigationCoordinator, action: #selector(NavigationCoordinator.interactivePopRecognized))
-            }
-            .overlay {
-                if navigationCoordinator.state.isAnimating,
-                   !UIAccessibility.prefersCrossFadeTransitions {
-                    GeometryReader { _ in
-                        navHeroOverlayView
-                            .frame(width: navigationCoordinator.currentRect.width, height: navigationCoordinator.currentRect.height)
-                            .clipped()
-                            // if we use the GeometryReader, the offset is with respect to the global origin,
-                            // if not, it's with respect to the center of the screen.
-                            // so, we wrap the view in a GeometryReader, but don't actually use the proxy
-                            .offset(x: navigationCoordinator.currentRect.minX, y: navigationCoordinator.currentRect.minY)
-                            .allowsHitTesting(false)
-                            .animation(navigationCoordinator.state.animation, value: navigationCoordinator.currentRect)
-                    }
-                    .edgesIgnoringSafeArea(.all)
-                }
-            }
-        } else {
-            NavStackEntryView(coordinator: coordinator, url: coordinator.initialURL)
+      NavStackEntryView(coordinator: coordinator, url: coordinator.initialURL)
+        .onAppear {
+          if !hasAppeared {
+              hasAppeared = true
+              Task {
+                  await coordinator.connect()
+              }
+          }
         }
     }
-    
-    @ViewBuilder
-    private var navHeroOverlayView: some View {
-        coordinator.builder.fromNodes(navigationCoordinator.sourceElement!.children(), coordinator: coordinator, url: coordinator.currentURL)
-    }
-    
-    @ViewBuilder
-    private var navigationViewOrStack: some View {
-        NavigationStack(path: $navigationCoordinator.navigationPath) {
-            navigationRoot
-                .navigationDestination(for: URL.self) { url in
-                    NavStackEntryView(coordinator: coordinator, url: url)
-                        .environmentObject(navigationCoordinator)
-                }
-        }
-        .onReceive(navigationCoordinator.$navigationPath.zip(navigationCoordinator.$navigationPath.dropFirst())) { (oldValue, newValue) in
-            // when navigating backwards, we need to reconnect to the old page
-            // this is done here, because PhxModernNavigationLink does't know when it's popped
-            // navigating forward is handled by the link, in order to do the hero transition
-            if oldValue.count > newValue.count {
-                let dest = newValue.last ?? coordinator.initialURL
-                Task {
-                    await coordinator.navigateTo(url: dest)
-                }
-            }
-        }
-    }
-    
-    private var navigationRoot: some View {
-        NavStackEntryView(coordinator: coordinator, url: coordinator.initialURL)
-            .environmentObject(navigationCoordinator)
-    }
-    
 }
