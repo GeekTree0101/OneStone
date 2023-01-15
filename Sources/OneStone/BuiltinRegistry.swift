@@ -51,7 +51,6 @@ struct BuiltinRegistry {
         case listRowInsets = "list_row_insets"
         case navigationTitle = "navigation_title"
         case padding
-        case tint
     }
     
     static func decodeModifier(_ type: ModifierType, from decoder: Decoder) throws -> any ViewModifier {
@@ -64,8 +63,6 @@ struct BuiltinRegistry {
             return try NavigationTitleModifier(from: decoder)
         case .padding:
             return try PaddingModifier(from: decoder)
-        case .tint:
-            return try TintModifier(from: decoder)
         }
     }
 }
