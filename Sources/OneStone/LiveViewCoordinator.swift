@@ -40,7 +40,6 @@ struct OneStoneLogger {
 private let logger = OneStoneLogger(subsystem: "LiveViewNative", category: "LiveViewCoordinator")
 
 /// The live view coordinator object handles connecting to Phoenix LiveView on the backend, managing the websocket connection, and transmitting/handling events.
-@MainActor
 public class LiveViewCoordinator<R: CustomRegistry>: ObservableObject {
     @Published internal private(set) var internalState: InternalState = .notConnected(reconnectAutomatically: false)
     /// The current state of the live view connection.
