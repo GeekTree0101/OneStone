@@ -12,8 +12,6 @@ struct NavigationLink<R: CustomRegistry>: View {
     @ObservedElement private var element: ElementNode
     private let context: LiveContext<R>
     @EnvironmentObject private var navCoordinator: NavigationCoordinator
-    @State private var source: HeroViewSourceKey.Value = nil
-    @State private var overrideView: HeroViewOverrideKey.Value = nil
     @State private var doNavigationCancellable: AnyCancellable?
     
     init(element: ElementNode, context: LiveContext<R>) {
@@ -32,12 +30,6 @@ struct NavigationLink<R: CustomRegistry>: View {
                     activateNavigationLink()
                 } label: {
                     context.buildChildren(of: element)
-                        .onPreferenceChange(HeroViewSourceKey.self) { newSource in
-                            source = newSource
-                        }
-                        .onPreferenceChange(HeroViewOverrideKey.self) { newOverrideView in
-                            overrideView = newOverrideView
-                        }
                 }
                 .disabled(element.attribute(named: "disabled") != nil)
             }
